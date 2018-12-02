@@ -45,19 +45,24 @@ public abstract class Jugador {
     }
     
     public int getPosicion(){
+
         return this.position;
     }
     
     public void setPosicion(int lugar){
+
         this.position=lugar;
     }
     
     public String getName(){
+
         return this.name;
     }
+
     public int getSalud(){
         return this.health;
     }
+
     public int restarMeditar(){
         this.meditar = (this.meditar - 1);
         if(this.meditar<0){

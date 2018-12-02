@@ -5,6 +5,7 @@
  */
 package infinitygame;
 
+
 /**
  *
  * @author Mauricio
@@ -18,8 +19,8 @@ public class Casilla {
         TipoCasilla elTipo = Enum.valueOf(TipoCasilla.class, Tipo);
         this.tipo = elTipo.getTipo();
     }
-    
-    public char devolverTipoCasilla(){
+
+    public char devolverTipoCasilla() {
         return this.tipo;
     }
 }

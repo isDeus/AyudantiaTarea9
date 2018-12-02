@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package infinitygame;
+package lanzador;
+import InterfazGame.Ventana;
 
 /**
  *
  * @author Mauricio
  */
-public class Main {
+public class Game {
     
     public static void main(String[] args) {
-        InfinityGame ifgame = new InfinityGame();
-        ifgame.ejecutarGame();
+        Ventana vn = new Ventana();
     }
-    
+            
+            
 }

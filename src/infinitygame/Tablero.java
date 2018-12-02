@@ -22,7 +22,7 @@ public class Tablero {
     }
 
     public void llenadoTablero() {
-        for (int i = 1; i < (this.tablero.length - 2); i++) {
+        for (int i = 1; i < (this.tablero.length - 1); i++) {
             String[] valores = new String[]{"BLANCO","PORTAL", "SALUD", "DESAFIO"};
             int rnd = new Random().nextInt(valores.length);
             String tipo = valores[rnd];

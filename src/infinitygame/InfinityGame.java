@@ -13,39 +13,34 @@ import java.util.*;
  */
 public class InfinityGame {
 
-    private ArrayList<Jugador> players;
+    public ArrayList<Jugador> players;
+    private Tablero tablerito;
+    private Guardian guardian;
+    private Casilla casilla;
+    private char[] tablero;
+    private int numeroCasillas;
+    private int numeroJugadores;
+    private int contadorTurno;
 
-    public InfinityGame() {
+    public InfinityGame(int cantidadCasillas, int cantidadJugadores) {
+        this.contadorTurno = 0;
+        this.numeroCasillas = cantidadCasillas;
+        this.numeroJugadores = cantidadJugadores;
+        this.tablerito = new Tablero(cantidadCasillas);
+        this.tablerito.llenadoTablero();
+        this.tablero = tablerito.getTablero();
         this.players = new ArrayList<>();
+        this.guardian = new Guardian(this.numeroJugadores);
     }
 
     public void ejecutarGame() {
-        System.out.println("Bienvenido a InfinityGame");
         //Creacion casilla
-        int casilla = numeroCasilla();
-        Tablero tablerito = new Tablero(casilla);
-        tablerito.llenadoTablero();
-        char tablero[] = tablerito.getTablero();
-        int numjug = cantidadJugadores();
-
-        agregarJugadores(numjug, casilla);
-
-        //Creacion Guardian
-        Guardian guardian = new Guardian(numjug);
         boolean estado = false;
         Scanner sc = new Scanner(System.in);
         do {
             for (int i = 0; i < this.players.size(); i++) {
+                this.contadorTurno++;
                 mostrarTabla();
-                //Hablidad de furia del guardian
-                int habilidad = guardian.habilidadFuria();
-                if (habilidad == 1) {
-                    for (int recorrido = 0; recorrido < this.players.size(); recorrido++) {
-                        this.players.get(i).cambiarVida(-1);
-                    }
-                    System.out.println("El guardian ha activado su habilidad furia!");
-                    System.out.println("Se ha restado 1 de vida a todos los jugadores");
-                }
                 //Turno normal del jugador
                 System.out.println("Que acción desea realizar? 1)Lanzar Dados 2)Meditar 3)Usar Habiliad especial");
                 int eleccion = sc.nextInt();
@@ -73,7 +68,7 @@ public class InfinityGame {
                             estado = true;
                         }
                         this.players.get(i).cambiarPosicion(dado);
-                        if (this.players.get(i).getPosicion() == (casilla - 1)) {
+                        if (this.players.get(i).getPosicion() == (this.numeroCasillas - 1)) {
                             System.out.println("El jugador " + this.players.get(i).getName() + " es el ganador!!!!");
                             estado = true;
                         } else {
@@ -120,56 +115,31 @@ public class InfinityGame {
         } while (!estado);
     }
 
-    private static int cantidadJugadores() {
-        int numjug = 0;
-        while (true) {
-            try {
-                Scanner sc = new Scanner(System.in);
-                System.out.println("Cuantos jugadores van a jugar? ");
-                numjug = sc.nextInt();
-                while (numjug < 1) {
-                    System.out.println("El número mínimo de jugadores es 1, intente denuevo");
-                    numjug = sc.nextInt();
-                }
-                System.out.println("El numero de jugadores es de : " + numjug);
+    public int habilidadGuardian(int i) {
+        int habilidad = this.guardian.habilidadFuria();
+        if (habilidad == 1) {
+            for (int recorrido = 0; recorrido < this.players.size(); recorrido++) {
+                this.players.get(i).cambiarVida(-1);
+            }
+        }
+        return habilidad;
+    }
+
+    public void agregarJugadores(int eleccion, String nombre, int numCasillas) {
+        switch (eleccion) {
+            case 1:
+                this.players.add(new Guerrero(nombre, numCasillas));
                 break;
-            } catch (InputMismatchException e) {
-                System.out.println("El valor ingresado no es un número");
-            }
+            case 2:
+                this.players.add(new Mago(nombre, numCasillas));
+                break;
+            default:
+                break;
         }
-        return numjug;
+
     }
 
-    private void agregarJugadores(int cantidadJugadores, int numCasillas) {
-        Scanner sc = new Scanner(System.in);
-        for (int i = 1; i <= cantidadJugadores; i++) {
-            String nombre = nombreJugador();
-            System.out.println("Eliga la clase del jugador :");
-            System.out.println("1) Guerrero");
-            System.out.println("2) Mago");
-            int eleccion = sc.nextInt();
-            switch (eleccion) {
-                case 1:
-                    this.players.add(new Guerrero(nombre, numCasillas));
-                    break;
-                case 2:
-                    this.players.add(new Mago(nombre, numCasillas));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    private static String nombreJugador() {
-        String nombre;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese el nombre del jugador :");
-        nombre = sc.nextLine();
-        return nombre;
-    }
-
-    private static int numeroCasilla() {
+    public int numeroCasilla() {
         int casilla = 0;
         while (true) {
             try {
@@ -297,5 +267,13 @@ public class InfinityGame {
         }
         //El erro mas comun que va a ocurrir es un out of bounds, eso significa 
         // hacer lo mismo que en los metodos que arregue de tablero y pedir jugadores
+    }
+
+    public int getContadorTurno() {
+        return this.contadorTurno;
+    }
+    
+    public char[] getTablero(){
+        return this.tablero;
     }
 }
